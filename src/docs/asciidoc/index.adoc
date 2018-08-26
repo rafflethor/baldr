@@ -1,0 +1,15 @@
+= Baldr
+:revnumber: {version}
+:numbered:
+:stem:
+
+
+"Baldr (also Balder, Baldur) is a god in Norse mythology, and a son of
+the god Odin and the goddess Frigg. He has numerous brothers, such as
+Thor and Váli."
+-- Wikipedia
+
+== Module description
+
+Baldr is a module responsible for managing and choosing participants
+and winners for raffles of type *LIVE*.

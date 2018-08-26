@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: io.rafflethor.baldr
+---
+testFramework: spock
+sourceLanguage: groovy

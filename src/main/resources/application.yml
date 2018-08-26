@@ -1,0 +1,18 @@
+micronaut:
+  application:
+    name: baldr
+
+  server:
+    port: 8080
+
+db:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5432/baldr
+  username: "baldr"
+  password: "baldr"
+
+flyway:
+  migrations:
+    - /migrations
+  schemas:
+    - public
