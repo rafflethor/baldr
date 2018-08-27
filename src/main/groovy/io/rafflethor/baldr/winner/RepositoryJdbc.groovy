@@ -1,4 +1,4 @@
-package io.rafflethor.baldr
+package io.rafflethor.baldr.winner
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -7,31 +7,13 @@ import groovy.sql.Sql
 import groovy.sql.GroovyRowResult
 import groovy.transform.CompileDynamic
 
-import io.rafflethor.baldr.model.Winner
-import io.rafflethor.baldr.model.WinnerInput
-import io.rafflethor.baldr.model.Participant
+import io.rafflethor.baldr.db.Utils
 
-/**
- * Database access implementation to manage participants and winners
- *
- * @since 0.1.0
- */
 @Singleton
 class RepositoryJdbc implements Repository {
 
   @Inject
   Sql sql
-
-  @Override
-  List<Participant> findAllParticipants(UUID raffle) {
-    String query = '''
-      SELECT * FROM participants WHERE raffleId = ?
-    '''
-
-    return sql
-      .rows(query, raffle)
-      .collect(this.&toParticipant)
-  }
 
   @Override
   List<Winner> saveWinners(UUID raffle, List<WinnerInput> winners) {
@@ -76,26 +58,6 @@ class RepositoryJdbc implements Repository {
   }
 
   @Override
-  Map checkRaffleResult(UUID id, String userHash) {
-    List<GroovyRowResult> winners = sql.rows('''
-          SELECT
-            p.hash,
-            p.email
-          FROM winners w JOIN participants p ON
-            w.participantId = p.id
-          WHERE w.raffleId = ?
-        ''', id)
-
-    Boolean didIWin = userHash in winners*.hash
-
-    return [
-      winners: winners,
-      didIWin: didIWin,
-      raffle: id,
-    ]
-  }
-
-  @Override
   List<Winner> markWinnersAsNonValid (List<UUID> winnersIds, UUID raffle) {
     String placeHolders = (1..winnersIds.size())
       .collect { "?" }
@@ -114,18 +76,24 @@ class RepositoryJdbc implements Repository {
     }
   }
 
-  @CompileDynamic
-  @SuppressWarnings('DuplicateStringLiteral')
-  private Participant toParticipant(GroovyRowResult row) {
-    List<String> fields = [
-      'id',
-      'raffleId',
-      'social',
-      'nick',
-      'hash',
-    ]
+  @Override
+  Map checkRaffleResult(UUID id, String userHash) {
+    List<GroovyRowResult> winners = sql.rows('''
+          SELECT
+            p.hash,
+            p.email
+          FROM winners w JOIN participants p ON
+            w.participantId = p.id
+          WHERE w.raffleId = ?
+        ''', id)
 
-    return new Participant(row.subMap(fields))
+    Boolean didIWin = userHash in winners*.hash
+
+    return [
+      winners: winners,
+      didIWin: didIWin,
+      raffle: id,
+    ]
   }
 
   @CompileDynamic

@@ -1,4 +1,4 @@
-package io.rafflethor.baldr.model
+package io.rafflethor.baldr.participant
 
 import groovy.transform.Immutable
 

@@ -1,29 +1,20 @@
-package io.rafflethor.baldr
+package io.rafflethor.baldr.winner
 
 import javax.inject.Inject
 import javax.inject.Singleton
 import io.reactivex.Observable
 
-import io.rafflethor.baldr.model.Winner
-import io.rafflethor.baldr.model.WinnerInput
-import io.rafflethor.baldr.model.Participant
+import io.rafflethor.baldr.participant.Participant
+import io.rafflethor.baldr.participant.Repository as ParticipantRepository
 
-/**
- * @since 0.1.0
- */
 @Singleton
 class ServiceImpl implements Service {
 
-  /**
-   * @since 0.1.0
-   */
   @Inject
   Repository repository
 
-  @Override
-  Observable<Participant> findAllParticipants(UUID raffle) {
-    return Observable.fromIterable(repository.findAllParticipants(raffle))
-  }
+  @Inject
+  ParticipantRepository participantRepository
 
   @Override
   Observable<Winner> findAllWinners(UUID raffle, Integer noWinners) {
@@ -31,7 +22,7 @@ class ServiceImpl implements Service {
       .findAllWinners(raffle)
       .size()
 
-    List<Participant> participants = repository
+    List<Participant> participants = participantRepository
       .findAllParticipants(raffle)
 
     Collections.shuffle(participants)

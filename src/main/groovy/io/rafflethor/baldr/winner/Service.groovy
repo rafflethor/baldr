@@ -1,23 +1,8 @@
-package io.rafflethor.baldr
+package io.rafflethor.baldr.winner
 
 import io.reactivex.Observable
-import io.rafflethor.baldr.model.Winner
-import io.rafflethor.baldr.model.Participant
 
-/**
- * Service to handle participants and winners
- *
- * @since 0.1.0
- */
 interface Service {
-
-  /**
-   * @param raffle id of the raffle we want the participants from
-   * @return an {@link Observable}
-   * @since 0.1.0
-   */
-  Observable<Participant> findAllParticipants(UUID raffle)
-
   /**
    * Emits a maximun number of {@link Winner} of a given raffle
    *

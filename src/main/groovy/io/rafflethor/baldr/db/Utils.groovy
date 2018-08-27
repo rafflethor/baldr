@@ -1,4 +1,4 @@
-package io.rafflethor.baldr
+package io.rafflethor.baldr.db
 
 import groovy.sql.Sql
 import java.sql.Connection

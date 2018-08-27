@@ -1,4 +1,4 @@
-package io.rafflethor.baldr.model
+package io.rafflethor.baldr.winner
 
 import java.sql.Timestamp
 import groovy.transform.Immutable

@@ -1,4 +1,4 @@
-package io.rafflethor.baldr
+package io.rafflethor.baldr.participant
 
 import javax.inject.Inject
 
@@ -8,9 +8,6 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Consumes
 import io.micronaut.http.annotation.Produces
-
-import io.rafflethor.baldr.model.Winner
-import io.rafflethor.baldr.model.Participant
 
 /**
  * Rest API endpoint to serve Baldr functionality
@@ -28,10 +25,5 @@ class Endpoint {
   @Get('/participants/{id}')
   public Observable<Participant> findAllParticipants(UUID id) {
     return service.findAllParticipants(id)
-  }
-
-  @Get('/winners/{id}{?noWinners:0}')
-  public Observable<Winner> findAllWinners(UUID id, Integer noWinners) {
-    return service.findAllWinners(id, noWinners)
   }
 }
