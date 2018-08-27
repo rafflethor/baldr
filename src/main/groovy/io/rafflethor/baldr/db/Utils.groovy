@@ -1,7 +1,10 @@
 package io.rafflethor.baldr.db
 
-import groovy.sql.Sql
 import java.sql.Connection
+import java.sql.Timestamp
+import java.time.LocalDateTime
+
+import groovy.sql.Sql
 
 /**
  * Different utility functions
@@ -38,5 +41,12 @@ class Utils {
    */
   static UUID generateUUID() {
     return UUID.randomUUID()
+  }
+
+  static Timestamp toTimestamp(LocalDateTime dateTime) {
+    return Optional
+      .ofNullable(dateTime)
+      .map(Timestamp.&valueOf)
+      .orElse(null) as Timestamp
   }
 }
