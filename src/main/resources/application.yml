@@ -16,3 +16,6 @@ flyway:
     - /migrations
   schemas:
     - public
+
+security:
+  url: security
