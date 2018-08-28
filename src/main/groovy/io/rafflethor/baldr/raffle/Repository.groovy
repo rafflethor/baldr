@@ -35,7 +35,7 @@ interface Repository {
    * @return the {@link Raffle} using the spot id passed as argument
    * @since 0.1.0
    */
-  Raffle findRaffleFromSpot(String spotId)
+  Raffle findBySpot(String spotId)
 
   /**
    * Saves or updates a given {@link Raffle}
@@ -56,7 +56,7 @@ interface Repository {
    * @return the updated {@link Raffle}
    * @since 0.1.0
    */
-  Raffle markRaffleWaiting(UUID id, UUID user)
+  Raffle markWaiting(UUID id, UUID user)
 
   /**
    * Marks a raffle as LIVE
@@ -65,7 +65,7 @@ interface Repository {
    * @return the updated {@link Raffle}
    * @since 0.1.0
    */
-  Raffle markRaffleLive(UUID id)
+  Raffle markLive(UUID id)
 
   /**
    * Marks a raffle as FINISHED
@@ -74,7 +74,7 @@ interface Repository {
    * @return the updated {@link Raffle}
    * @since 0.1.0
    */
-  Raffle markRaffleFinished(UUID id)
+  Raffle markFinished(UUID id)
 
   /**
    * Retrieves the first {@link Raffle} with the WAITING status
@@ -82,7 +82,7 @@ interface Repository {
    * @return an instance of {@link Raffle}
    * @since 0.1.0
    */
-  Raffle findWaitingRaffle()
+  Raffle findWaiting()
 
   /**
    * Deletes the {@link Raffle} with the id passed as argument

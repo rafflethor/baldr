@@ -3,6 +3,7 @@ package io.rafflethor.baldr.raffle
 import static io.rafflethor.baldr.db.Utils.toTimestamp
 
 import javax.inject.Inject
+import javax.inject.Singleton
 
 import groovy.sql.Sql
 import groovy.sql.GroovyRowResult
@@ -15,6 +16,7 @@ import io.rafflethor.baldr.db.Pagination
  *
  * @since 0.1.0
  */
+@Singleton
 class RepositoryImpl implements Repository {
 
   /**
@@ -119,7 +121,7 @@ class RepositoryImpl implements Repository {
   }
 
   @Override
-  Raffle findRaffleFromSpot(String spotId) {
+  Raffle findBySpot(String spotId) {
     UUID uuid = sql
       .firstRow("SELECT raffleId  as id FROM raffle_spot WHERE id = ?", spotId)
       .id as UUID
@@ -131,28 +133,28 @@ class RepositoryImpl implements Repository {
   }
 
   @Override
-  Raffle markRaffleWaiting(UUID id, UUID user) {
+  Raffle markWaiting(UUID id, UUID user) {
     sql.executeUpdate("UPDATE raffles SET status = 'WAITING' WHERE id = ? and createdBy = ?", id, user)
 
     return findById(id, user)
   }
 
   @Override
-  Raffle markRaffleLive(UUID id) {
+  Raffle markLive(UUID id) {
     sql.executeUpdate("UPDATE raffles SET status = 'LIVE' WHERE id = ?", id)
 
     return findByIdUnsecured(id)
   }
 
   @Override
-  Raffle markRaffleFinished(UUID id) {
+  Raffle markFinished(UUID id) {
     sql.executeUpdate("UPDATE raffles SET status = 'FINISHED' WHERE id = ?", id)
 
     return findByIdUnsecured(id)
   }
 
   @Override
-  Raffle findWaitingRaffle() {
+  Raffle findWaiting() {
     return Raffles.toRaffle(sql.firstRow("SELECT * FROM raffles WHERE status = 'WAITING'"))
   }
 
