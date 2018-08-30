@@ -5,6 +5,7 @@ import javax.inject.Inject
 import io.reactivex.Observable
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.Put
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Consumes
 import io.micronaut.http.annotation.Produces
@@ -22,8 +23,18 @@ class Endpoint {
   @Inject
   Service service
 
-  @Get('/winners/{id}{?noWinners:0}')
-  public Observable<Winner> findAllWinners(UUID id, Integer noWinners) {
-    return service.findAllWinners(id, noWinners)
+  @Get('/raffle/{raffleId}/winners/{?noWinners:0}')
+  Observable<Winner> findAllWinners(UUID raffleId, Integer noWinners) {
+    return service.findAllWinners(raffleId, noWinners)
+  }
+
+  @Put('/raffle/{raffleId}/winners/')
+  Observable<Winner> markWinnersAsNonValid(List<UUID> winners, UUID raffleId) {
+    return service.markWinnersAsNonValid(winners, raffleId)
+  }
+
+  @Get('/raffle/{raffleId}/result/{userHash}')
+  Observable<Result> checkRaffleResult(UUID raffleId, String userHash) {
+    return service.checkRaffleResult(raffleId, userHash)
   }
 }

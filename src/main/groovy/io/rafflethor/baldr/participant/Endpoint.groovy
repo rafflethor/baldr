@@ -22,8 +22,8 @@ class Endpoint {
   @Inject
   Service service
 
-  @Get('/participants/{id}')
-  public Observable<Participant> findAllParticipants(UUID id) {
-    return service.findAllParticipants(id)
+  @Get('/raffle/{raffleId}/participants')
+  public Observable<Participant> findAllParticipants(UUID raffleId) {
+    return service.findAllParticipants(raffleId)
   }
 }

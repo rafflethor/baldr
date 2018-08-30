@@ -1,5 +1,10 @@
 package io.rafflethor.baldr.winner
 
+/**
+ * Database access repository contract
+ *
+ * @since 0.1.0
+ */
 interface Repository {
   /**
    * Finds all chosen winners for a given raffle
@@ -28,7 +33,7 @@ interface Repository {
    * @return a list of the non valid winners
    * @since 0.1.0
    */
-  List<Winner> markWinnersAsNonValid (List<UUID> winners, UUID raffle)
+  List<Winner> markWinnersAsNonValid(List<UUID> winners, UUID raffle)
 
   /**
    * Retrieves a map containing information about the winners of a
@@ -40,5 +45,5 @@ interface Repository {
    * @return information about the raffle winners
    * @since 0.1.0
    */
-  Map checkRaffleResult(UUID raffle, String userHash)
+  Result checkRaffleResult(UUID raffle, String userHash)
 }

@@ -7,6 +7,11 @@ import io.reactivex.Observable
 import io.rafflethor.baldr.participant.Participant
 import io.rafflethor.baldr.participant.Repository as ParticipantRepository
 
+/**
+ * Service implementation responsible for managing winners
+ *
+ * @since 0.1.0
+ */
 @Singleton
 class ServiceImpl implements Service {
 
@@ -41,5 +46,15 @@ class ServiceImpl implements Service {
       participantId: participant.id,
       raffleId: participant.raffleId
     )
+  }
+
+  @Override
+  Observable<Winner> markWinnersAsNonValid(List<UUID> winners, UUID raffle) {
+    return Observable.fromIterable(repository.markWinnersAsNonValid(winners, raffle))
+  }
+
+  @Override
+  Observable<Result> checkRaffleResult(UUID raffle, String userHash) {
+    return Observable.just(repository.checkRaffleResult(raffle, userHash))
   }
 }

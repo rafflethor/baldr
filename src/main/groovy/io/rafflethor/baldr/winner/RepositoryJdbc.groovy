@@ -9,6 +9,11 @@ import groovy.transform.CompileDynamic
 
 import io.rafflethor.baldr.db.Utils
 
+/**
+ * Database access repository implementation using plain Groovy jdbc
+ *
+ * @since 0.1.0
+ */
 @Singleton
 class RepositoryJdbc implements Repository {
 
@@ -77,7 +82,7 @@ class RepositoryJdbc implements Repository {
   }
 
   @Override
-  Map checkRaffleResult(UUID id, String userHash) {
+  Result checkRaffleResult(UUID id, String userHash) {
     List<GroovyRowResult> winners = sql.rows('''
           SELECT
             p.hash,
@@ -89,11 +94,11 @@ class RepositoryJdbc implements Repository {
 
     Boolean didIWin = userHash in winners*.hash
 
-    return [
+    return new Result(
       winners: winners,
       didIWin: didIWin,
       raffle: id,
-    ]
+    )
   }
 
   @CompileDynamic
