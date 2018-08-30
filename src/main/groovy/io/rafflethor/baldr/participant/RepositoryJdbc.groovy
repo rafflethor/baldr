@@ -7,6 +7,12 @@ import groovy.sql.Sql
 import groovy.sql.GroovyRowResult
 import groovy.transform.CompileDynamic
 
+/**
+ * Database access implementation for participants using Groovy jdbc
+ * api
+ *
+ * @since 0.1.0
+ */
 @Singleton
 class RepositoryJdbc implements Repository {
 

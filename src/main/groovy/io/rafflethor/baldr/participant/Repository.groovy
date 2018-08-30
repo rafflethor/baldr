@@ -1,6 +1,12 @@
 package io.rafflethor.baldr.participant
 
+/**
+ * Database access for participants
+ *
+ * @since 0.1.0
+ */
 interface Repository {
+
   /**
    * Finds a random list of participants from a given raffle
    *
