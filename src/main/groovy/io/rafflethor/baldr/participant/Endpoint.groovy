@@ -23,7 +23,7 @@ class Endpoint {
   Service service
 
   @Get('/raffle/{raffleId}/participants')
-  public Observable<Participant> findAllParticipants(UUID raffleId) {
+  Observable<Participant> findAllParticipants(UUID raffleId) {
     return service.findAllParticipants(raffleId)
   }
 }
