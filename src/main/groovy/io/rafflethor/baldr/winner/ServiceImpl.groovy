@@ -2,6 +2,8 @@ package io.rafflethor.baldr.winner
 
 import javax.inject.Inject
 import javax.inject.Singleton
+
+import io.reactivex.Single
 import io.reactivex.Observable
 
 import io.rafflethor.baldr.participant.Participant
@@ -54,7 +56,7 @@ class ServiceImpl implements Service {
   }
 
   @Override
-  Observable<Result> checkRaffleResult(UUID raffle, String userHash) {
-    return Observable.just(repository.checkRaffleResult(raffle, userHash))
+  Single<Result> checkRaffleResult(UUID raffle, String userHash) {
+    return Single.just(repository.checkRaffleResult(raffle, userHash))
   }
 }

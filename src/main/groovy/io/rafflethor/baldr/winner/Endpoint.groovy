@@ -2,6 +2,7 @@ package io.rafflethor.baldr.winner
 
 import javax.inject.Inject
 
+import io.reactivex.Single
 import io.reactivex.Observable
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Get
@@ -36,7 +37,7 @@ class Endpoint {
   }
 
   @Get('/{raffleId}/result/{userHash}')
-  Observable<Result> checkRaffleResult(UUID raffleId, String userHash) {
+  Single<Result> checkRaffleResult(UUID raffleId, String userHash) {
     return service.checkRaffleResult(raffleId, userHash)
   }
 }

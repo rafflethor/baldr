@@ -86,7 +86,7 @@ class RepositoryJdbc implements Repository {
     List<GroovyRowResult> winners = sql.rows('''
           SELECT
             p.hash,
-            p.email
+            p.social
           FROM winners w JOIN participants p ON
             w.participantId = p.id
           WHERE w.raffleId = ?
@@ -95,9 +95,9 @@ class RepositoryJdbc implements Repository {
     Boolean didIWin = userHash in winners*.hash
 
     return new Result(
-      winners: winners,
+      winners: winners.collect(this.&toWinner),
       didIWin: didIWin,
-      raffle: id,
+      raffleId: id,
     )
   }
 

@@ -1,5 +1,6 @@
 package io.rafflethor.baldr.winner
 
+import io.reactivex.Single
 import io.reactivex.Observable
 
 /**
@@ -40,5 +41,5 @@ interface Service {
    * @return information about the raffle winners
    * @since 0.1.0
    */
-  Observable<Result> checkRaffleResult(UUID raffle, String userHash)
+  Single<Result> checkRaffleResult(UUID raffle, String userHash)
 }
