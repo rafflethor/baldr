@@ -1,6 +1,6 @@
 package io.rafflethor.baldr.security
 
-import io.reactivex.Observable
+import io.reactivex.Single
 
 /**
  * Security service. The service acts as a proxy to the real security
@@ -11,17 +11,11 @@ import io.reactivex.Observable
 interface Service {
 
   /**
-   * @param username
-   * @param password
-   * @return
+   * Authenticates the provided token
+   *
+   * @param token the provided token
+   * @return the user information
    * @since 0.1.0
    */
-  Observable<User> authentication(String username, String password)
-
-  /**
-   * @param jwtToken
-   * @return
-   * @since 0.1.0
-   */
-  Observable<User> authentication(String jwtToken)
+  Single<User> authenticateToken(String token)
 }

@@ -2,7 +2,7 @@ package io.rafflethor.baldr.security
 
 import javax.inject.Inject
 import javax.inject.Singleton
-import io.reactivex.Observable
+import io.reactivex.Single
 
 /**
  * Security service implementation. The service acts as a proxy to the
@@ -13,16 +13,16 @@ import io.reactivex.Observable
 @Singleton
 class ServiceImpl implements Service {
 
+  /**
+   * Client used to proxy all security calls to the security module
+   *
+   * @since 0.1.0
+   */
   @Inject
   Client client
 
   @Override
-  Observable<User> authentication(String username, String password) {
-    return null
-  }
-
-  @Override
-  Observable<User> authentication(String jwtToken) {
-    return null
+  Single<User> authenticateToken(String token) {
+    return client.authenticateToken(token)
   }
 }
