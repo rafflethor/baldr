@@ -22,6 +22,6 @@ class ServiceImpl implements Service {
 
   @Override
   Observable<Participant> findAllParticipants(UUID raffle) {
-    return Observable.fromIterable(repository.findAllParticipants(raffle))
+    return repository.findAllParticipants(raffle)
   }
 }

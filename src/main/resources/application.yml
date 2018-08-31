@@ -5,6 +5,16 @@ micronaut:
   server:
     port: 8080
 
+postgres:
+  reactive:
+    client:
+      port: 5432
+      host: localhost
+      database: baldr
+      user: baldr
+      password: baldr
+      maxSize: 5
+
 db:
   driverClassName: org.postgresql.Driver
   url: jdbc:postgresql://localhost:5432/baldr

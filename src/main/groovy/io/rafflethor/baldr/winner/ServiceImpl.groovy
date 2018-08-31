@@ -29,10 +29,10 @@ class ServiceImpl implements Service {
       .findAllWinners(raffle)
       .size()
 
-    List<Participant> participants = participantRepository
+    Observable<Participant> participants = participantRepository
       .findAllParticipants(raffle)
 
-    Collections.shuffle(participants)
+    // Collections.shuffle(participants)
 
     Integer howMany = noWinners - validWinners
     List<WinnerInput> winners = participants

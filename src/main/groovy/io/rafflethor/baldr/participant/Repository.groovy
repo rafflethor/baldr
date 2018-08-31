@@ -1,5 +1,7 @@
 package io.rafflethor.baldr.participant
 
+import io.reactivex.Observable
+
 /**
  * Database access for participants
  *
@@ -15,5 +17,5 @@ interface Repository {
    * given raffle
    * @since 0.1.0
    */
-  List<Participant> findAllParticipants(UUID raffle)
+  Observable<Participant> findAllParticipants(UUID raffle)
 }
