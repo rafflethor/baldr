@@ -3,7 +3,6 @@
 :numbered:
 :stem:
 
-
 "Baldr (also Balder, Baldur) is a god in Norse mythology, and a son of
 the god Odin and the goddess Frigg. He has numerous brothers, such as
 Thor and Váli."

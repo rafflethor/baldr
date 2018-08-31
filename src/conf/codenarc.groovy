@@ -37,6 +37,7 @@ ruleset {
     }
     'Indentation' {
       spacesPerIndentLevel = 2
+      doNotApplyToFileNames = '*Spec.*'
     }
   }
   ruleset('rulesets/naming.xml') {
