@@ -25,38 +25,39 @@ class ServiceImpl implements Service {
 
   @Override
   Observable<Winner> findAllWinners(UUID raffle, Integer noWinners) {
-    Integer validWinners = repository
-      .findAllWinners(raffle)
-      .size()
-
-    Observable<Participant> participants = participantRepository
-      .findAllParticipants(raffle)
-
-    // Collections.shuffle(participants)
-
-    Integer howMany = noWinners - validWinners
-    List<WinnerInput> winners = participants
-      .take(howMany)
-      .collect(this.&toWinnerInput)
-
-    repository.saveWinners(raffle, winners)
-    return Observable.fromIterable(repository.findAllWinners(raffle))
+    //    Integer validWinners = repository
+    //      .findAllWinners(raffle)
+    //      .size()
+    //
+    //    Observable<Participant> participants = participantRepository
+    //      .findAllParticipants(raffle)
+    //
+    //    // Collections.shuffle(participants)
+    //
+    //    Integer howMany = noWinners - validWinners
+    //    List<WinnerInput> winners = participants
+    //      .take(howMany)
+    //      .collect(this.&toWinnerInput)
+    //
+    //    repository.saveWinners(raffle, winners)
+    //    return Observable.fromIterable(repository.findAllWinners(raffle))
+    return null
   }
 
-  private WinnerInput toWinnerInput(Participant participant) {
-    return new WinnerInput(
-      participantId: participant.id,
-      raffleId: participant.raffleId
-    )
-  }
+  //  private WinnerInput toWinnerInput(Participant participant) {
+  //    return new WinnerInput(
+  //      participantId: participant.id,
+  //      raffleId: participant.raffleId
+  //    )
+  //  }
 
   @Override
   Observable<Winner> markWinnersAsNonValid(List<UUID> winners, UUID raffle) {
-    return Observable.fromIterable(repository.markWinnersAsNonValid(winners, raffle))
+    return repository.markWinnersAsNonValid(winners, raffle)
   }
 
   @Override
   Single<Result> checkRaffleResult(UUID raffle, String userHash) {
-    return Single.just(repository.checkRaffleResult(raffle, userHash))
+    return repository.checkRaffleResult(raffle, userHash)
   }
 }

@@ -40,7 +40,9 @@ dependencies {
   compile "io.micronaut:http-client"
   compile "io.micronaut:http-server-netty"
   compile "io.micronaut.configuration:postgres-reactive"
-
+  compile("io.reactiverse:reactive-pg-client:0.10.0") {
+    force = true
+  }
   compile 'com.zaxxer:HikariCP:3.1.0'
   compile "org.codehaus.groovy:groovy-sql:2.5.1"
   compile "org.postgresql:postgresql:42.1.4"

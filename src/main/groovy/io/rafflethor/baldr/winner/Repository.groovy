@@ -1,5 +1,8 @@
 package io.rafflethor.baldr.winner
 
+import io.reactivex.Single
+import io.reactivex.Observable
+
 /**
  * Database access repository contract
  *
@@ -13,7 +16,7 @@ interface Repository {
    * @return a list of {@link Winner}
    * @since 0.1.0
    */
-  List<Winner> findAllWinners(UUID raffle)
+  Observable<Winner> findAllWinners(UUID raffle)
 
   /**
    * @param raffle
@@ -21,7 +24,7 @@ interface Repository {
    * @return
    * @since 0.1.0
    */
-  List<Winner> saveWinners(UUID raffle, List<WinnerInput> participants)
+  Observable<Winner> saveWinners(UUID raffle, List<WinnerInput> participants)
 
   /**
    * Marks a list of winners as non valid using their ids. And
@@ -33,7 +36,7 @@ interface Repository {
    * @return a list of the non valid winners
    * @since 0.1.0
    */
-  List<Winner> markWinnersAsNonValid(List<UUID> winners, UUID raffle)
+  Observable<Winner> markWinnersAsNonValid(List<UUID> winners, UUID raffle)
 
   /**
    * Retrieves a map containing information about the winners of a
@@ -45,5 +48,5 @@ interface Repository {
    * @return information about the raffle winners
    * @since 0.1.0
    */
-  Result checkRaffleResult(UUID raffle, String userHash)
+  Single<Result> checkRaffleResult(UUID raffle, String userHash)
 }

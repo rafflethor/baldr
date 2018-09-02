@@ -1,7 +1,11 @@
 package io.rafflethor.baldr.db
 
+import java.util.stream.Stream
+import java.util.stream.StreamSupport
+import io.reactivex.Single
 import io.reactivex.Observable
 import io.reactiverse.reactivex.pgclient.Row
+import io.reactiverse.reactivex.pgclient.PgPool
 import io.reactiverse.reactivex.pgclient.PgRowSet
 
 /**
@@ -39,6 +43,34 @@ class RxUtils {
    * @since 0.1.0
    */
   static Observable<Row> toObservable(PgRowSet rowSet) {
-    return Observable.fromIterable(new RowIterable(rowSet))
+    return Observable.fromIterable(toIterable(rowSet))
+  }
+
+  /**
+   * @param rowSet
+   * @return
+   * @since 0.1.0
+   */
+  static Iterable<Row> toIterable(PgRowSet rowSet) {
+    return new RowIterable(rowSet)
+  }
+
+  /**
+   * @param rowSet
+   * @return
+   * @since 0.1.0
+   */
+  static Stream<Row> toStream(PgRowSet rowSet) {
+    return StreamSupport.stream(toIterable(rowSet).spliterator(), false)
+  }
+
+  /**
+   * @param client
+   * @param fn
+   * @return
+   * @since 0.1.0
+   */
+  static Single<PgRowSet> executeTx(PgPool client, Closure<Single<PgRowSet>>... fn) {
+    return null
   }
 }

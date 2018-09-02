@@ -1,6 +1,6 @@
 package io.rafflethor.baldr.winner
 
-import java.sql.Timestamp
+import java.time.LocalDateTime
 import groovy.transform.Immutable
 
 /**
@@ -8,7 +8,7 @@ import groovy.transform.Immutable
  *
  * @since 0.1.0
  */
-@Immutable(knownImmutableClasses = [Timestamp])
+@Immutable
 class Winner {
   /**
    * The raffle the winner has been taken from
@@ -23,6 +23,8 @@ class Winner {
    * @since 0.1.0
    */
   UUID id
+
+  String hash
 
   /**
    * Which position holds when winning
@@ -50,7 +52,7 @@ class Winner {
    *
    * @since 0.1.0
    */
-  Timestamp createdAt
+  LocalDateTime createdAt
 
   /**
    * A given winner could be marked as non valid because several
