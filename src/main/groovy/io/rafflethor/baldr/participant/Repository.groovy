@@ -18,4 +18,14 @@ interface Repository {
    * @since 0.1.0
    */
   Observable<Participant> findAllParticipants(UUID raffle)
+
+  /**
+   * Returns a random list of participants that are not winners yet
+   *
+   * @param raffle raffle the participants belong to
+   * @param noWinners number of samples
+   * @return a random number of {@link Participant} instances
+   * @since 0.1.0
+   */
+  Observable<Participant> findAllPossibleWinners(UUID raffle, Integer noWinners)
 }

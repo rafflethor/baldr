@@ -36,6 +36,24 @@ class RepositoryRx implements Repository {
       .map(this.&toParticipant)
   }
 
+  @Override
+  Observable<Participant> findAllPossibleWinners(UUID raffle, Integer noWinners) {
+    String query = '''
+      SELECT
+        p.*
+      FROM participants p JOIN winner w ON
+        p.id != w.participantId
+      WHERE
+        p.raffleId = $1
+      ORDER BY random() LIMIT $2
+    '''
+
+    return client
+      .rxPreparedQuery(query, Tuple.of(raffle, noWinners))
+      .flatMapObservable(RxUtils.&toObservable)
+      .map(this.&toParticipant)
+  }
+
   private Participant toParticipant(Row row) {
     UUID id = row.delegate.getUUID("id")
     UUID raffleId = row.delegate.getUUID("raffleid")

@@ -25,31 +25,19 @@ class ServiceImpl implements Service {
 
   @Override
   Observable<Winner> findAllWinners(UUID raffle, Integer noWinners) {
-    //    Integer validWinners = repository
-    //      .findAllWinners(raffle)
-    //      .size()
-    //
-    //    Observable<Participant> participants = participantRepository
-    //      .findAllParticipants(raffle)
-    //
-    //    // Collections.shuffle(participants)
-    //
-    //    Integer howMany = noWinners - validWinners
-    //    List<WinnerInput> winners = participants
-    //      .take(howMany)
-    //      .collect(this.&toWinnerInput)
-    //
-    //    repository.saveWinners(raffle, winners)
-    //    return Observable.fromIterable(repository.findAllWinners(raffle))
-    return null
+    return participantRepository
+      .findAllPossibleWinners(raffle, noWinners)
+      .map(this.&toWinnerInput)
+      .buffer(noWinners)
+      .flatMap({ List<WinnerInput> inputs -> repository.saveWinners(raffle, inputs) })
   }
 
-  //  private WinnerInput toWinnerInput(Participant participant) {
-  //    return new WinnerInput(
-  //      participantId: participant.id,
-  //      raffleId: participant.raffleId
-  //    )
-  //  }
+  private WinnerInput toWinnerInput(Participant participant) {
+    return new WinnerInput(
+      participantId: participant.id,
+      raffleId: participant.raffleId
+    )
+  }
 
   @Override
   Observable<Winner> markWinnersAsNonValid(List<UUID> winners, UUID raffle) {
