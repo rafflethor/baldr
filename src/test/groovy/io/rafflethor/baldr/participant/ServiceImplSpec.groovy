@@ -14,7 +14,9 @@ class ServiceImplSpec extends Specification {
     given: 'the mocked repository'
     Participant sample = Fixtures.createSample()
     Repository repository = Mock(Repository) {
-      findAllParticipants(_ as UUID) >> sample.collect()
+      findAllParticipants(_ as UUID) >> {
+        return Observable.fromIterable(sample.collect())
+      }
     }
 
     and: 'an instance of the service'
@@ -35,7 +37,9 @@ class ServiceImplSpec extends Specification {
   void 'find all participants with no result' () {
     given: 'the mocked repository'
     Repository repository = Mock(Repository) {
-      findAllParticipants(_ as UUID) >> []
+      findAllParticipants(_ as UUID) >> {
+        return Observable.fromIterable([])
+      }
     }
 
     and: 'an instance of the service'
