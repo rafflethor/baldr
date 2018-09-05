@@ -12,7 +12,6 @@ import io.reactiverse.reactivex.pgclient.PgPool
 import io.reactiverse.reactivex.pgclient.PgTransaction
 import io.reactiverse.reactivex.pgclient.Tuple
 import io.reactiverse.reactivex.pgclient.PgRowSet
-import io.reactiverse.reactivex.pgclient.PgConnection
 
 import io.rafflethor.baldr.db.RxUtils
 
@@ -32,8 +31,8 @@ class RepositoryRx implements Repository {
     Completable completable = client
       .rxBegin()
       .flatMapCompletable({ PgTransaction tx ->
-         saveAll(tx, winners) // FALTA tx.rollback()
-          .flatMapCompletable({ PgRowSet rowSet -> tx.rxCommit() })
+      saveAll(tx, winners)
+        .flatMapCompletable({ PgRowSet rowSet -> tx.rxCommit() })
       })
 
     return completable.andThen(findAllWinners(raffle))
@@ -50,74 +49,70 @@ class RepositoryRx implements Repository {
     return winners
       .stream()
       .map({ WinnerInput p ->
-        UUID uuid = UUID.randomUUID()
-        tx.rxPreparedQuery(
-          query,
-          Tuple.of(uuid, p.participantId, p.raffleId)
-        )
-    }).reduce({ Single<PgRowSet> left, Single<PgRowSet> right -> left.flatMap({ PgRowSet l -> right }) })
-      .orElse(Single.error(new Exception('ss')))
+      UUID uuid = UUID.randomUUID()
+      tx.rxPreparedQuery(
+        query,
+        Tuple.of(uuid, p.participantId, p.raffleId)
+      )
+    }).reduce(this.&getLastElement)
+      .orElse(Single.error(new NoSuchElementException()))
+  }
+
+  private Single<PgRowSet> getLastElement(Single<PgRowSet> first, Single<PgRowSet> second) {
+    return first.flatMap({ PgRowSet l -> second })
   }
 
   @Override
   Observable<Winner> findAllWinners(UUID raffle) {
-    Closure<Single<PgRowSet>> getAll = this.listWinners(raffle)
-
-    return getAll()
+    return client
+      .rxPreparedQuery(findAllQuery, Tuple.of(raffle))
       .flatMapObservable(RxUtils.&toObservable)
       .map(this.&toWinner)
   }
 
   @Override
   Observable<Winner> markWinnersAsNonValid (List<UUID> winnersIds, UUID raffle) {
-    Single<PgRowSet> rows = RxUtils.executeTx(
-      client,
-      this.updateWinners(winnersIds),
-      this.listWinners(raffle)
-    )
+    String updateQuery = getUpdateQuery(winnersIds)
+    Completable transaction = client
+      .rxBegin()
+      .flatMapCompletable({ PgTransaction tx ->
+      tx
+        .rxPreparedQuery(updateQuery, Tuple.of(winnersIds))
+        .flatMapCompletable({ result -> tx.commit() })
+      })
 
-    return rows
-      .flatMapObservable(RxUtils.&toObservable)
-      .map(this.&toWinner)
+    return transaction.andThen(findAllWinners(raffle))
   }
 
-  Closure<Single<PgRowSet>> updateWinners(List<UUID> winnersIds) {
-    return { PgConnection conn ->
-      String placeHolders = (1..winnersIds.size())
-        .collect({ Integer i -> "\$$i" })
-        .join(",")
+  String getFindAllQuery() {
+    return '''
+      SELECT
+        w.raffleId,
+        w.ordering,
+        w.id,
+        p.social,
+        p.nick,
+        w.isValid,
+        w.createdAt
+      FROM winners w JOIN participants p ON
+        w.participantId = p.id
+      WHERE w.raffleId = ?
+    '''
+  }
 
-      String updateQuery = """
+  String getUpdateQuery(List<UUID> winnersIds) {
+    String placeHolders = (1..winnersIds.size())
+      .collect({ Integer i -> "\$$i" })
+      .join(",")
+
+    String updateQuery = """
       UPDATE winners SET
         isValid = false
       WHERE
         id in ($placeHolders)
-      """
+    """
 
-      return conn
-        .rxPreparedQuery(updateQuery, Tuple.of(winnersIds))
-    } as Closure<Single<PgRowSet>>
-  }
-
-  Closure<Single<PgRowSet>> listWinners(UUID raffle) {
-    return { PgConnection conn ->
-      String query = '''
-          SELECT
-            w.raffleId,
-            w.ordering,
-            w.id,
-            p.social,
-            p.nick,
-            w.isValid,
-            w.createdAt
-          FROM winners w JOIN participants p ON
-            w.participantId = p.id
-          WHERE w.raffleId = ?
-        '''
-
-      return conn
-        .rxPreparedQuery(query, Tuple.of(raffle))
-    } as Closure<Single<PgRowSet>>
+    return updateQuery
   }
 
   @Override
@@ -134,14 +129,19 @@ class RepositoryRx implements Repository {
     return client
       .rxPreparedQuery(query, Tuple.of(id))
       .map(this.&toWinnerList)
-      .map({ List<Winner> winners ->
+      .map(this.getResult(id))
+  }
+
+  private Closure<Result> getResult(UUID id) {
+    return { List<Winner> winners ->
       Boolean didIWin = winners.any(this.&isSameHash)
+
       return new Result(
         winners: winners.collect(this.&toWinner),
         didIWin: didIWin,
         raffleId: id,
       )
-    })
+    }
   }
 
   private Boolean isSameHash(String hash) {
