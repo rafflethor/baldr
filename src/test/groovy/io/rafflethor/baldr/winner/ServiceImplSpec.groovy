@@ -14,7 +14,7 @@ import io.rafflethor.baldr.participant.Repository as ParticipantRepository
 class ServiceImplSpec extends Specification {
 
   void 'find all winners with result' () {
-    given: ''
+    given: 'a couple of sample data'
     Participant participant = Fixtures.PARTICIPANTS.createSample()
     Winner winner = Fixtures.WINNERS.createSample()
 

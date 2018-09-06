@@ -1,0 +1,31 @@
+micronaut:
+  application:
+    name: baldr
+
+  server:
+    port: 8080
+
+postgres:
+  reactive:
+    client:
+      port: 5432
+      host: testing
+      database: baldr
+      user: baldr
+      password: baldr
+      maxSize: 5
+
+db:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://localhost/baldr
+  username: "baldr"
+  password: "baldr"
+
+flyway:
+  migrations:
+    - /migrations
+  schemas:
+    - public
+
+security:
+  url: security
