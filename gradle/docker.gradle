@@ -1,0 +1,14 @@
+apply plugin: 'com.bmuschko.docker-java-application'
+
+docker {
+  dockerDistTar {
+    environmentVariable('JAVA_OPTS', '-Djava.security.egd=file:/dev/./urandom')
+    runCommand('apk --no-cache add curl')
+  }
+
+  javaApplication {
+    baseImage = 'openjdk:8u171-alpine3.7'
+    ports = [5050]
+    tag = "rafflethor-docker-rafflethor.bintray.io/baldr:$version"
+  }
+}

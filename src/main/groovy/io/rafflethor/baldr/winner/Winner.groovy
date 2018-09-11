@@ -8,7 +8,6 @@ import groovy.transform.Immutable
  *
  * @since 0.1.0
  */
-@Immutable
 class Winner {
   /**
    * The raffle the winner has been taken from
@@ -66,4 +65,8 @@ class Winner {
    * @since 0.1.0
    */
   Boolean isValid;
+
+  void setCreatedAt(java.sql.Timestamp timestamp) {
+    this.createdAt = timestamp.toLocalDateTime()
+  }
 }
