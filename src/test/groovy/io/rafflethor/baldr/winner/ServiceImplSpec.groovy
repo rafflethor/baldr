@@ -26,7 +26,7 @@ class ServiceImplSpec extends Specification {
     }
 
     ParticipantRepository participantRepository = Mock(ParticipantRepository) {
-      findAllPossibleWinners(_ as UUID, _ as Integer) >> {
+      findAllPossibleWinners(_ as UUID, _ as Long) >> {
         return Observable.fromIterable(participant.collect())
       }
     }

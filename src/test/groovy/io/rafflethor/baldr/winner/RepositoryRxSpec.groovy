@@ -3,9 +3,11 @@ package io.rafflethor.baldr.winner
 import io.reactivex.Observable
 import org.junit.Rule
 
+import spock.lang.Shared
+import spock.lang.AutoCleanup
 import spock.lang.Specification
-import io.micronaut.runtime.server.EmbeddedServer
 import io.micronaut.context.ApplicationContext
+import io.micronaut.runtime.server.EmbeddedServer
 import org.testcontainers.containers.PostgreSQLContainer
 
 /**
@@ -13,26 +15,25 @@ import org.testcontainers.containers.PostgreSQLContainer
  */
 class RepositoryRxSpec extends Specification {
 
-  static final String DB = "rafflethor-docker-rafflethor.bintray.io/db:1.0.0-alpine"
-
   @Rule
-  PostgreSQLContainer postgres = new PostgreSQLContainer(DB)
+  PostgreSQLContainer postgres = new PostgreSQLContainer()
+
+  @Shared
+  @AutoCleanup
+  EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
 
   void 'find all possible winners'() {
-    given: 'an instance of the server'
-    EmbeddedServer server = ApplicationContext.run(EmbeddedServer)
-    Repository repository = server
-      .applicationContext
-      .getBean(Repository)
+    given: 'a populated database'
+    ApplicationContext ctx = embeddedServer.applicationContext
+    Repository repository = ctx.getBean(Repository)
 
     when: 'asking for a given raffle winners'
-    UUID id = UUID.randomUUID()
-    Observable<Winner> winners = repository.findAllWinners(id)
+    UUID id = UUID.fromString('cc00c00e-6a42-11e8-adc0-fa7ae01bbebc')
+    Winner winner = repository
+      .findAllWinners(id)
+      .blockingFirst()
 
     then: 'we should get 4 winners'
-    winners
-      .test()
-      .assertNoErrors()
-      .assertValueCount(4)
+    winner
   }
 }

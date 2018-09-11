@@ -31,31 +31,26 @@ class RepositoryRx implements Repository {
     Completable completable = client
       .rxBegin()
       .flatMapCompletable({ PgTransaction tx ->
-      saveAll(tx, winners)
-        .flatMapCompletable({ PgRowSet rowSet -> tx.rxCommit() })
+        saveAll(tx, winners).flatMapCompletable({ PgRowSet rowSet ->
+          tx.rxCommit()
+        })
       })
 
     return completable.andThen(findAllWinners(raffle))
   }
 
   Single<PgRowSet> saveAll(PgTransaction tx, List<WinnerInput> winners) {
-    String query = '''
-        INSERT INTO winners
-          (id, participantId, raffleId)
-        VALUES
-          ($1, $2, $3)
-      '''
+    String query = 'INSERT INTO winners (id, participantid, raffleid) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING;'
 
     return winners
       .stream()
       .map({ WinnerInput p ->
-      UUID uuid = UUID.randomUUID()
-      tx.rxPreparedQuery(
-        query,
-        Tuple.of(uuid, p.participantId, p.raffleId)
-      )
-    }).reduce(this.&getLastElement)
-      .orElse(Single.error(new NoSuchElementException()))
+        UUID uuid = UUID.randomUUID()
+        tx.rxPreparedQuery(
+          query,
+          Tuple.of(uuid, p.participantId, p.raffleId))
+      }).reduce(this.&getLastElement)
+        .orElse(Single.error(new NoSuchElementException()))
   }
 
   private Single<PgRowSet> getLastElement(Single<PgRowSet> first, Single<PgRowSet> second) {
@@ -87,16 +82,16 @@ class RepositoryRx implements Repository {
   String getFindAllQuery() {
     return '''
       SELECT
-        w.raffleId,
+        w.raffleid,
         w.ordering,
         w.id,
         p.social,
         p.nick,
-        w.isValid,
-        w.createdAt
+        w.isvalid,
+        w.createdat
       FROM winners w JOIN participants p ON
-        w.participantId = p.id
-      WHERE w.raffleId = ?
+        w.participantid = p.id
+      WHERE w.raffleid = $1
     '''
   }
 

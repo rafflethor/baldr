@@ -9,17 +9,17 @@ postgres:
   reactive:
     client:
       port: 5432
-      host: testing
-      database: baldr
-      user: baldr
-      password: baldr
+      host: localhost
+      database: test
+      user: test
+      password: test
       maxSize: 5
 
 db:
-  driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://localhost/baldr
-  username: "baldr"
-  password: "baldr"
+  driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+  url: jdbc:tc:postgresql:9.6.8://localhost/test
+  username: test
+  password: test
 
 flyway:
   migrations:

@@ -27,5 +27,5 @@ interface Repository {
    * @return a random number of {@link Participant} instances
    * @since 0.1.0
    */
-  Observable<Participant> findAllPossibleWinners(UUID raffle, Integer noWinners)
+  Observable<Participant> findAllPossibleWinners(UUID raffle, Long noWinners)
 }
