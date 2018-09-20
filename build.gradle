@@ -73,7 +73,7 @@ mainClassName = "io.rafflethor.baldr.Application"
 task publishApiImage(type: DockerPushImage) {
     dependsOn dockerBuildImage
 
-    imageName = "rafflethor-docker-rafflethor.bintray.io/api:$version"
+    imageName = "rafflethor-docker-rafflethor.bintray.io/baldr:$version"
     registryCredentials = new DockerRegistryCredentials(
         username: System.getenv('DOCKER_REGISTRY_USERNAME'),
         password: System.getenv('DOCKER_REGISTRY_PASSWORD')

@@ -13,7 +13,6 @@ import groovy.sql.GroovyRowResult
 
 import io.rafflethor.baldr.db.Utils
 
-
 /**
  * Database access repository implementation using plain Groovy jdbc
  *
@@ -47,23 +46,24 @@ class RepositoryJdbc implements Repository {
       .andThen(findAllWinners(raffle))
   }
 
-//  Single<PgRowSet> saveAll(PgTransaction tx, List<WinnerInput> winners) {
-//    String query = 'INSERT INTO winners (id, participantid, raffleid) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING;'
-//
-//    return winners
-//      .stream()
-//      .map({ WinnerInput p ->
-//        UUID uuid = UUID.randomUUID()
-//        tx.rxPreparedQuery(
-//          query,
-//          Tuple.of(uuid, p.participantId, p.raffleId))
-//      }).reduce(this.&getLastElement)
-//        .orElse(Single.error(new NoSuchElementException()))
-//  }
+  //  Single<PgRowSet> saveAll(PgTransaction tx, List<WinnerInput> winners) {
+  //    String query = 'INSERT INTO winners (id, participantid, raffleid)
+  // VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING;'
+  //
+  //    return winners
+  //      .stream()
+  //      .map({ WinnerInput p ->
+  //        UUID uuid = UUID.randomUUID()
+  //        tx.rxPreparedQuery(
+  //          query,
+  //          Tuple.of(uuid, p.participantId, p.raffleId))
+  //      }).reduce(this.&getLastElement)
+  //        .orElse(Single.error(new NoSuchElementException()))
+  //  }
 
-//  private Single<PgRowSet> getLastElement(Single<PgRowSet> first, Single<PgRowSet> second) {
-//    return first.flatMap({ PgRowSet l -> second })
-//  }
+  //  private Single<PgRowSet> getLastElement(Single<PgRowSet> first, Single<PgRowSet> second) {
+  //    return first.flatMap({ PgRowSet l -> second })
+  //  }
 
   @Override
   Observable<Winner> findAllWinners(UUID raffle) {

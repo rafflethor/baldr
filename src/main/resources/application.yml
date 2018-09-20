@@ -7,7 +7,7 @@ micronaut:
 
 db:
   driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://localhost:5432/baldr
+  url: jdbc:postgresql://baldr-pod-db:5432/baldr
   username: "baldr"
   password: "baldr"
 

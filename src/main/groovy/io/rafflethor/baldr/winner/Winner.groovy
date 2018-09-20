@@ -1,7 +1,6 @@
 package io.rafflethor.baldr.winner
 
 import java.time.LocalDateTime
-import groovy.transform.Immutable
 
 /**
  * Represents a potential winner for a given raffle
